@@ -14,18 +14,19 @@ namespace timer
             long s = 0;
             using (timer.Start())
             {
-                for (int i = 0; i < 111231445; i++)
-                    s += i - s + 1;
+                for (int i = 0; i < 2e8; i++)
+                    s += i - s;
 
             }
             Console.WriteLine(timer.ElapsedMilliseconds);
 
             using (timer.Continue())
             {
-                for (int i = 0; i < 1231445; i++)
-                    s += i - s + 2;
+                for (int i = 0; i < 2e8; i++)
+                    s += i - s;
             }
             Console.WriteLine(timer.ElapsedMilliseconds);
+            //Console.ReadKey();
         }
     }
 
@@ -42,31 +43,13 @@ namespace timer
         public Timer()
         {
             elapsedMilliseconds = 0;
-        }
-
-        private bool isDisposed = false;
-        ~Timer()
-        {
-            Dispose(false);
-        }
-        protected virtual void Dispose(bool fromDisposeMethod)
-        {
-            if (!isDisposed)
-            {
-                if (fromDisposeMethod)
-                {
-                    Console.WriteLine("Очистка управляемых ресурсов в {0}");
-                }
-                Console.WriteLine("Очистка неуправляемых ресурсов в {0}");
-                isDisposed = true;
-            }
-        }
+        }        
         public Timer Start()
         {
             start = DateTime.Now;
+            elapsedMilliseconds = 0;
             return this;
         }
-
         public Timer Stop()
         {
             end = DateTime.Now;
@@ -80,7 +63,8 @@ namespace timer
         }
         public long ElapsedMilliseconds
         {
-            get {
+            get
+            {
                 return elapsedMilliseconds;
             }
 

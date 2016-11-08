@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace timer
@@ -14,16 +16,14 @@ namespace timer
             long s = 0;
             using (timer.Start())
             {
-                for (int i = 0; i < 2e8; i++)
-                    s += i - s;
+                Thread.Sleep(100);
 
             }
             Console.WriteLine(timer.ElapsedMilliseconds);
-
+            
             using (timer.Continue())
             {
-                for (int i = 0; i < 2e8; i++)
-                    s += i - s;
+                Thread.Sleep(300);
             }
             Console.WriteLine(timer.ElapsedMilliseconds);
             Console.ReadKey();

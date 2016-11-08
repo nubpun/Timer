@@ -10,12 +10,11 @@ namespace timer
     {
         private DateTime start;
         private DateTime end;
-        private long elapsedTicks;
+        private TimeSpan elapsed;
         private bool isRunning;
         public void Dispose()
         {
-            if(isRunning)
-                Stop();
+            Stop();
         }
         public Timer()
         {
@@ -23,17 +22,29 @@ namespace timer
         }
         public Timer Start()
         {
-            isRunning = true;
-            start = DateTime.Now;
-            elapsedTicks = 0;
+            if (!isRunning)
+            {
+                Reset();
+                isRunning = true;
+                start = DateTime.Now;
+            }
             return this;
+        }
+        public Timer StartNew()
+        {
+            var t = new Timer();
+            return t.Start();
         }
         public Timer Stop()
         {
-            isRunning = false;
-            end = DateTime.Now;
-            elapsedTicks += (end.Ticks - start.Ticks);
+            if (isRunning)
+            {
+                isRunning = false;
+                end = DateTime.Now;
+                elapsed += end - start;                
+            }
             return this;
+
         }
         public Timer Continue()
         {
@@ -46,7 +57,7 @@ namespace timer
             start = DateTime.Now;
             end = DateTime.Now;
             isRunning = false;
-            elapsedTicks = 0;
+            elapsed = new TimeSpan(0);
             return this;
         }
         public Timer Restart()
@@ -58,7 +69,7 @@ namespace timer
         {
             get
             {
-                return elapsedTicks / TimeSpan.TicksPerMillisecond;
+                return elapsed.Milliseconds;
             }
 
         }
@@ -67,7 +78,7 @@ namespace timer
         {
             get
             {
-                return elapsedTicks;
+                return elapsed.Ticks;
             }
         }
 

@@ -26,48 +26,8 @@ namespace timer
                     s += i - s;
             }
             Console.WriteLine(timer.ElapsedMilliseconds);
-            //Console.ReadKey();
+            Console.ReadKey();
         }
     }
 
-    class Timer : IDisposable
-    {
-        DateTime start;
-        DateTime end;
-        long elapsedMilliseconds;
-        public void Dispose()
-        {
-            Stop();
-        }
-
-        public Timer()
-        {
-            elapsedMilliseconds = 0;
-        }        
-        public Timer Start()
-        {
-            start = DateTime.Now;
-            elapsedMilliseconds = 0;
-            return this;
-        }
-        public Timer Stop()
-        {
-            end = DateTime.Now;
-            elapsedMilliseconds += (end.Ticks - start.Ticks) / TimeSpan.TicksPerMillisecond;
-            return this;
-        }
-        public Timer Continue()
-        {
-            start = DateTime.Now;
-            return this;
-        }
-        public long ElapsedMilliseconds
-        {
-            get
-            {
-                return elapsedMilliseconds;
-            }
-
-        }
-    }
 }

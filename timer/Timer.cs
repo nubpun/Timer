@@ -89,5 +89,9 @@ namespace timer
                 return isRunning;
             }
         }
+        public TimeSpan GetTimestamp()
+        {
+            return elapsed;
+        }
     }
 }

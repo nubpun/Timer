@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,13 +9,12 @@ namespace timer
 {
     class Timer: IDisposable
     {
-        private DateTime start;
-        private DateTime end;
-        private TimeSpan elapsed;
-        private bool isRunning;
+        Stopwatch stopwatch;
+        TimeSpan elapsed;
         public void Dispose()
         {
-            Stop();
+            stopwatch.Stop();
+            elapsed = elapsed + stopwatch.Elapsed;
         }
         public Timer()
         {
@@ -22,41 +22,18 @@ namespace timer
         }
         public Timer Start()
         {
-            if (!isRunning)
-            {
-                Reset();
-                isRunning = true;
-                start = DateTime.Now;
-            }
+            Reset();
+            stopwatch.Start();
             return this;
-        }
-        public Timer StartNew()
-        {
-            var t = new Timer();
-            return t.Start();
-        }
-        public Timer Stop()
-        {
-            if (isRunning)
-            {
-                isRunning = false;
-                end = DateTime.Now;
-                elapsed += end - start;                
-            }
-            return this;
-
         }
         public Timer Continue()
         {
-            isRunning = true;
-            start = DateTime.Now;
+            stopwatch.Restart();
             return this;
         }
-        public Timer Reset()
+        private Timer Reset()
         {
-            start = DateTime.Now;
-            end = DateTime.Now;
-            isRunning = false;
+            stopwatch = new Stopwatch();
             elapsed = new TimeSpan(0);
             return this;
         }
@@ -86,12 +63,8 @@ namespace timer
         {
             get
             {
-                return isRunning;
+                return stopwatch.IsRunning;
             }
-        }
-        public TimeSpan GetTimestamp()
-        {
-            return elapsed;
         }
     }
 }
